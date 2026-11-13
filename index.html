@@ -1,0 +1,224 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<title>Выбор адреса</title>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<link rel="stylesheet" href="/brand.css">
+<link rel="stylesheet" href="vendor/leaflet.css">
+<style>
+  :root {
+    --bg: var(--cream); --fg: var(--ink); --hint: var(--mute); --card: #ffffff; --accent: var(--coral); --accent-fg: #ffffff;
+  }
+  button, input { font-family: inherit; }
+  .leaflet-container { background: var(--peach); }
+  .leaflet-container, .leaflet-control, .leaflet-control a, .leaflet-bar a, .leaflet-control-attribution { font-family: var(--font) !important; }
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  html, body { height: 100%; margin: 0; background: var(--bg); color: var(--fg);
+    font: 16px/1.35 var(--font); }
+  #app { height: 100%; display: flex; flex-direction: column; }
+  #top { padding: 10px 12px 8px; position: relative; z-index: 2000; background: var(--bg); }
+  #q { width: 100%; padding: 12px 14px; border-radius: 14px; border: 1.5px solid var(--line);
+    background: var(--card); color: var(--fg); font-size: 16px; outline: none; }
+  #qwrap { position: relative; }
+  #sugg { position: absolute; left: 0; right: 0; top: 52px; background: var(--bg); border: 1px solid var(--line);
+    border-radius: 12px; box-shadow: 0 8px 24px rgba(0,0,0,.18); max-height: 40vh; overflow-y: auto; display: none; }
+  #sugg button { display: block; width: 100%; text-align: left; padding: 11px 14px; border: 0; background: none;
+    color: var(--fg); font-size: 15px; border-bottom: 1px solid var(--line); }
+  #sugg button:last-child { border-bottom: 0; }
+  #sugg small { display: block; color: var(--hint); font-size: 13px; }
+  #sugg .empty { padding: 12px 14px; color: var(--hint); font-size: 14px; }
+  #map { flex: 1; min-height: 160px; }
+  #panel { padding: 10px 12px calc(12px + env(safe-area-inset-bottom)); background: var(--bg); border-top: 1px solid var(--line); }
+  #hint { color: var(--hint); font-size: 13px; margin: 0 0 8px; }
+  .row { display: flex; gap: 8px; margin-bottom: 8px; }
+  .row input { padding: 11px 12px; border-radius: 10px; border: 1px solid var(--line); background: var(--card);
+    color: var(--fg); font-size: 15px; outline: none; min-width: 0; }
+  #label { flex: 1; } #flat { width: 96px; }
+  #ok { width: 100%; padding: 14px; border: 0; border-radius: 999px; background: var(--accent); color: var(--accent-fg);
+    font-size: 16px; font-weight: 700; }
+  #ok:disabled { opacity: .45; }
+  .leaflet-container { font-family: inherit; }
+  #bk[hidden] { display: none !important; }
+  #title { margin: 0 0 8px; font-size: 17px; font-weight: 700; }
+  #here { width: 100%; margin: 0 0 8px; padding: 11px; border-radius: 999px; border: 1.5px solid var(--line);
+    background: var(--card); color: var(--fg); font-size: 15px; }
+</style>
+</head>
+<body>
+<div id="app">
+<div class="role-ribbon" role="banner" style="flex:none;background:#1d6fd6;color:#fff;font:700 13px/1.3 var(--font);text-align:center;padding:7px 10px">🔵 КЛИЕНТСКОЕ МЕНЮ · Зооконсьерж</div>
+  <div id="top">
+    <a class="back" id="bk" href="/" hidden aria-label="Назад" style="display:inline-flex;align-items:center;gap:6px;margin:0 0 8px;padding:8px 14px 8px 10px;border-radius:999px;border:1px solid var(--line);background:var(--card);color:var(--fg);font-size:15px;font-weight:700;text-decoration:none" onclick="if(history.length>1&&document.referrer&&document.referrer.indexOf(location.origin)===0){history.back();return false}"><span style="font-size:20px;line-height:1">←</span>Назад</a>
+    <p id="title" hidden></p>
+    <div id="qwrap"><input id="q" type="search" placeholder="Начните вводить адрес: улица, дом" autocomplete="off" enterkeyhint="search">
+    <div id="sugg"></div></div>
+    <button id="here" type="button">📍 Я здесь</button>
+  </div>
+  <div id="map"></div>
+  <div id="panel">
+    <p id="hint">Выберите адрес из подсказок или коснитесь своего дома на карте.</p>
+    <div class="row">
+      <input id="label" type="text" placeholder="Адрес" autocomplete="off">
+      <input id="flat" type="text" placeholder="Кв./офис" autocomplete="off" inputmode="text">
+    </div>
+    <button id="ok" disabled>Выбрать этот адрес</button>
+  </div>
+</div>
+<script src="vendor/leaflet.js"></script>
+<script>
+(function () {
+  // telegram-web-app.js создаёт Telegram.WebApp в ЛЮБОМ браузере; внутри Telegram platform — ios/android/tdesktop…,
+  // снаружи — "unknown". Поэтому смотрим на platform, а не на сам объект, иначе в браузере кнопка «молчит».
+  var tgApi = window.Telegram && window.Telegram.WebApp;
+  var tg = tgApi && tgApi.platform && tgApi.platform !== "unknown" ? tgApi : null;
+  if (tg) { tg.ready(); tg.expand(); }
+  else { document.getElementById("bk").hidden = false; }  // в Telegram есть своя кнопка «Назад»
+
+  // Москва и Московская область: lon_min, lat_min, lon_max, lat_max (как на сервере)
+  var BBOX = [35.1, 54.2, 40.3, 56.97];
+  var STATES = ["москва", "московская область", "moscow", "moscow oblast"];
+  function inBox(lat, lon) { return lon >= BBOX[0] && lon <= BBOX[2] && lat >= BBOX[1] && lat <= BBOX[3]; }
+
+  var map = L.map("map", { maxBounds: [[BBOX[1], BBOX[0]], [BBOX[3], BBOX[2]]], minZoom: 8 })
+    .setView([55.7558, 37.6173], 10);
+  L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", { maxZoom: 19, attribution: "© OpenStreetMap" }).addTo(map);
+
+  var $ = function (id) { return document.getElementById(id); };
+  var q = $("q"), sugg = $("sugg"), label = $("label"), flat = $("flat"), ok = $("ok"), hint = $("hint");
+  var marker = null, sel = null, timer = null, ctrl = null;
+
+  // Зоотакси: бот открывает карту с ?pt=a (откуда забрать) или ?pt=b (куда поедем) и &from=lat,lon — подача на карте
+  var params = new URLSearchParams(location.search);
+  var pt = params.get("pt");
+  if (pt === "a" || pt === "b") {
+    var title = $("title");
+    title.hidden = false;
+    title.textContent = pt === "a" ? "🚕 Откуда забрать питомца?" : "🏁 Куда поедем?";
+    $("ok").textContent = pt === "a" ? "Забрать отсюда" : "Ехать сюда";
+  }
+  var from = (params.get("from") || "").split(",").map(parseFloat);
+  if (pt === "b" && from.length === 2 && inBox(from[0], from[1])) {
+    L.circleMarker([from[0], from[1]], { radius: 9, weight: 3, color: "#fff", fillColor: "#e8a33d", fillOpacity: 1 })
+      .addTo(map).bindTooltip("Подача", { permanent: true, direction: "top" });
+    map.setView([from[0], from[1]], 13);
+  }
+
+  function setPoint(lat, lon, text, zoom) {
+    sel = { lat: lat, lon: lon };
+    if (marker) marker.setLatLng([lat, lon]);
+    else marker = L.circleMarker([lat, lon], { radius: 10, weight: 3, color: "#fff", fillColor: "#2481cc", fillOpacity: 1 }).addTo(map);
+    if (zoom) map.setView([lat, lon], Math.max(map.getZoom(), zoom));
+    if (text != null) label.value = text;
+    refresh();
+  }
+  function refresh() {
+    var t = label.value.trim();
+    var hasHouse = /\d/.test(t);
+    ok.disabled = !(sel && t.length >= 5 && hasHouse);
+    if (sel && !hasHouse) hint.textContent = "Допишите номер дома в поле «Адрес».";
+    else if (sel) hint.textContent = "Проверьте адрес и нажмите «Выбрать». Если точка неточная — сдвиньте её касанием по карте.";
+  }
+
+  // ---------- Подсказки по мере набора (Photon: поиск по данным OpenStreetMap, бесплатно) ----------
+  function photonLabel(p) {
+    var street = p.street || p.name || "";
+    var parts = [street, p.housenumber, p.district || p.suburb, p.city || p.town || p.village || p.locality || p.county];
+    var seen = [];
+    parts.forEach(function (x) { if (x && seen.indexOf(x) < 0) seen.push(x); });
+    return seen.join(", ");
+  }
+  function showSugg(items, msg) {
+    sugg.innerHTML = "";
+    if (!items.length) {
+      var e = document.createElement("div"); e.className = "empty"; e.textContent = msg; sugg.appendChild(e);
+    }
+    items.forEach(function (it) {
+      var b = document.createElement("button"); b.type = "button";
+      b.textContent = it.label;
+      if (it.sub) { var s = document.createElement("small"); s.textContent = it.sub; b.appendChild(s); }
+      b.onclick = function () {
+        sugg.style.display = "none"; q.value = it.label; q.blur();
+        setPoint(it.lat, it.lon, it.label, 17);
+      };
+      sugg.appendChild(b);
+    });
+    sugg.style.display = "block";
+  }
+  function search(text) {
+    if (ctrl) ctrl.abort();
+    ctrl = new AbortController();
+    var url = "https://photon.komoot.io/api/?limit=7&lang=default&lat=55.75&lon=37.62&bbox=" + BBOX.join(",") +
+      "&q=" + encodeURIComponent(text);
+    fetch(url, { signal: ctrl.signal }).then(function (r) { return r.json(); }).then(function (j) {
+      var items = [];
+      (j.features || []).forEach(function (f) {
+        var p = f.properties || {}, c = f.geometry && f.geometry.coordinates;
+        if (!c || !inBox(c[1], c[0])) return;
+        if (p.state && STATES.indexOf(String(p.state).toLowerCase()) < 0) return;
+        var l = photonLabel(p);
+        if (!l) return;
+        items.push({ label: l, sub: p.housenumber ? "" : "дом не указан — допишите номер", lat: c[1], lon: c[0] });
+      });
+      showSugg(items, "Ничего не нашлось. Коснитесь своего дома на карте.");
+    }).catch(function (e) {
+      if (e.name === "AbortError") return;
+      showSugg([], "Подсказки сейчас недоступны. Коснитесь своего дома на карте.");
+    });
+  }
+  q.addEventListener("input", function () {
+    clearTimeout(timer);
+    var t = q.value.trim();
+    if (t.length < 3) { sugg.style.display = "none"; return; }
+    timer = setTimeout(function () { search(t); }, 350);
+  });
+  document.addEventListener("click", function (e) { if (!sugg.contains(e.target) && e.target !== q) sugg.style.display = "none"; });
+
+  // ---------- Выбор точки касанием по карте (Nominatim reverse: один запрос на касание) ----------
+  map.on("click", function (e) { pickAt(e.latlng.lat, e.latlng.lng, null); });
+  function pickAt(lat, lon, zoom) {
+    if (!inBox(lat, lon)) { hint.textContent = "Эта точка вне Москвы и области."; return; }
+    setPoint(lat, lon, "", zoom);
+    hint.textContent = "Определяю адрес…";
+    fetch("https://nominatim.openstreetmap.org/reverse?format=jsonv2&zoom=18&addressdetails=1&accept-language=ru&lat=" + lat + "&lon=" + lon)
+      .then(function (r) { return r.json(); }).then(function (j) {
+        var a = (j && j.address) || {};
+        var town = a.city || a.town || a.village || a.hamlet || a.municipality || "";
+        var parts = [a.road || a.pedestrian || j.name, a.house_number, a.suburb !== town ? a.suburb : "", town].filter(Boolean);
+        label.value = parts.join(", ");
+        refresh();
+      }).catch(function () { hint.textContent = "Адрес по точке не определился — впишите его в поле «Адрес»."; });
+  }
+
+  // «Я здесь»: геопозиция браузера/телефона. Если Telegram или Safari не дали — подсказываем, что делать
+  $("here").addEventListener("click", function () {
+    if (!navigator.geolocation) { hint.textContent = "Геопозиция тут недоступна. Найдите адрес или коснитесь карты."; return; }
+    hint.textContent = "Определяю, где вы…";
+    navigator.geolocation.getCurrentPosition(function (p) {
+      pickAt(p.coords.latitude, p.coords.longitude, 17);
+    }, function () {
+      hint.textContent = "Не удалось определить место: разрешите геопозицию или коснитесь карты. В боте есть кнопка «📍 Отправить геопозицию».";
+    }, { enableHighAccuracy: true, timeout: 10000, maximumAge: 30000 });
+  });
+  label.addEventListener("input", refresh);
+
+  ok.addEventListener("click", function () {
+    if (!sel) return;
+    var payload = JSON.stringify({ lat: sel.lat, lon: sel.lon, label: label.value.trim(), flat: flat.value.trim() });
+    if (tg) { tg.sendData(payload); return; }
+    // открыто в браузере с сайта: адрес уходит в чат того же гостя (cookie) и страница возвращает в чат
+    window.__picked = payload;
+    hint.textContent = "Передаю адрес в чат…";
+    fetch("/chat/api/send", { method: "POST", credentials: "same-origin",
+      headers: { "X-Zc": "1", "Content-Type": "application/json" }, body: JSON.stringify({ pick: payload }) })
+      .then(function (r) {
+        if (r.ok) { location.href = "/chat"; return; }
+        hint.innerHTML = "Не получилось передать адрес. Откройте <a href=\"/chat\">чат</a> и попробуйте снова.";
+      }).catch(function () { hint.textContent = "Нет связи. Попробуйте ещё раз."; });
+  });
+  window.__test = { setPoint: setPoint };
+})();
+</script>
+</body>
+</html>
