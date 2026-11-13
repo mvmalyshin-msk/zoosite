@@ -7,6 +7,8 @@ import BoardingPage from './pages/BoardingPage';
 import TaxiPage from './pages/TaxiPage';
 import ChatPage from './pages/ChatPage';
 import CabinetPage from './pages/CabinetPage';
+import AboutPage from './pages/AboutPage';
+import ContactsPage from './pages/ContactsPage';
 
 function App() {
   return (
@@ -20,6 +22,8 @@ function App() {
           <Route path="taxi" element={<TaxiPage />} />
           <Route path="chat" element={<ChatPage />} />
           <Route path="cabinet" element={<CabinetPage />} />
+          <Route path="about" element={<AboutPage />} />
+          <Route path="contacts" element={<ContactsPage />} />
         </Route>
       </Routes>
     </BrowserRouter>

@@ -1,0 +1,162 @@
+# Instructions
+
+- Following Playwright test failed.
+- Explain why, be concise, respect Playwright best practices.
+- Provide a snippet of code with the fix, if possible.
+
+# Test info
+
+- Name: playwright.test.ts >> Зооконсьерж — основной тест >> Мобильное меню открывается
+- Location: playwright.test.ts:76:3
+
+# Error details
+
+```
+Test timeout of 30000ms exceeded.
+```
+
+# Page snapshot
+
+```yaml
+- generic [ref=e3]:
+  - banner [ref=e4]:
+    - generic [ref=e5]:
+      - link "ЗОО КОНСЬЕРЖ" [ref=e6] [cursor=pointer]:
+        - /url: /
+        - generic [ref=e7]: ЗОО
+        - text: КОНСЬЕРЖ
+      - navigation [ref=e8]:
+        - link "Главная" [ref=e9] [cursor=pointer]:
+          - /url: /
+        - link "Выгул" [ref=e10] [cursor=pointer]:
+          - /url: /walk
+        - link "Зооняня" [ref=e11] [cursor=pointer]:
+          - /url: /nanny
+        - link "Передержка" [ref=e12] [cursor=pointer]:
+          - /url: /boarding
+        - link "Зоотакси" [ref=e13] [cursor=pointer]:
+          - /url: /taxi
+      - generic [ref=e14]:
+        - link "Чат" [ref=e15] [cursor=pointer]:
+          - /url: /chat
+          - text: 💬
+        - link "Кабинет" [ref=e16] [cursor=pointer]:
+          - /url: /cabinet
+          - text: 👤
+        - button "Меню" [ref=e17] [cursor=pointer]
+  - main [ref=e22]:
+    - generic [ref=e25]:
+      - heading "Зооконсьерж — профессиональный уход за вашим питомцем" [level=1] [ref=e26]
+      - paragraph [ref=e27]: Мы профессионально находим проверенных специалистов и решаем любые вопросы, связанные с вашим питомцем. Берём на себя всю рутину по поиску и проверке, чтобы вы были спокойны.
+      - generic [ref=e28]:
+        - link "Наши услуги" [ref=e29] [cursor=pointer]:
+          - /url: "#services"
+        - link "Написать в бот" [ref=e30] [cursor=pointer]:
+          - /url: https://t.me/zooconcierge_bot
+    - generic [ref=e32]:
+      - heading "Наши услуги" [level=2] [ref=e33]
+      - generic [ref=e34]:
+        - link "🏠 Зооняня Профессиональный уход за вашим питомцем, включая кормление, игры и уход, пока вы отсутствуете. Приходящая или с проживанием. Подробнее →" [ref=e35] [cursor=pointer]:
+          - /url: /nanny
+          - generic [ref=e36]: 🏠
+          - heading "Зооняня" [level=3] [ref=e37]
+          - paragraph [ref=e38]: Профессиональный уход за вашим питомцем, включая кормление, игры и уход, пока вы отсутствуете. Приходящая или с проживанием.
+          - generic [ref=e39]: Подробнее →
+        - link "🐕 Выгул Безопасный выгул вашего питомца на свежем воздухе. Найдем ответственного догситтера с удобным для вас графиком. Подробнее →" [ref=e40] [cursor=pointer]:
+          - /url: /walk
+          - generic [ref=e41]: 🐕
+          - heading "Выгул" [level=3] [ref=e42]
+          - paragraph [ref=e43]: Безопасный выгул вашего питомца на свежем воздухе. Найдем ответственного догситтера с удобным для вас графиком.
+          - generic [ref=e44]: Подробнее →
+        - 'link "🚗 Зоотакси Комфортная и безопасная перевозка животного. Доставка вашего питомца куда угодно: к ветеринару, в парк или к друзьям. Подробнее →" [ref=e45] [cursor=pointer]':
+          - /url: /taxi
+          - generic [ref=e46]: 🚗
+          - heading "Зоотакси" [level=3] [ref=e47]
+          - paragraph [ref=e48]: "Комфортная и безопасная перевозка животного. Доставка вашего питомца куда угодно: к ветеринару, в парк или к друзьям."
+          - generic [ref=e49]: Подробнее →
+        - 'link "🏡 Передержка Временный уход за вашим питомцем в безопасном помещении. Подберем идеальные условия: частный дом или зоогостиница. Подробнее →" [ref=e50] [cursor=pointer]':
+          - /url: /boarding
+          - generic [ref=e51]: 🏡
+          - heading "Передержка" [level=3] [ref=e52]
+          - paragraph [ref=e53]: "Временный уход за вашим питомцем в безопасном помещении. Подберем идеальные условия: частный дом или зоогостиница."
+          - generic [ref=e54]: Подробнее →
+    - generic [ref=e56]:
+      - heading "Наши преимущества" [level=2] [ref=e57]
+      - generic [ref=e58]:
+        - generic [ref=e59]:
+          - generic [ref=e60]: 3️⃣
+          - heading "Три варианта на выбор" [level=3] [ref=e61]
+          - paragraph [ref=e62]: "Для вашего удобства мы всегда подбираем 3 разнобюджетных предложения, чтобы вы могли сравнить: Эконом, Комфорт и Комфорт с деталями."
+        - generic [ref=e63]:
+          - generic [ref=e64]: 🎯
+          - heading "Индивидуальный подход" [level=3] [ref=e65]
+          - paragraph [ref=e66]: При подборе мы обязательно учитываем породу, возраст, характер, привычки и страхи вашего животного.
+        - generic [ref=e67]:
+          - generic [ref=e68]: 💰
+          - heading "Прозрачная стоимость" [level=3] [ref=e69]
+          - paragraph [ref=e70]: Услуги по поиску, проверке и подбору специалиста уже включены в итоговую стоимость. Никаких скрытых комиссий или доплат.
+    - generic [ref=e73]:
+      - generic [ref=e74]: 🐾
+      - heading "Бот для записи" [level=2] [ref=e75]
+      - paragraph [ref=e76]: "Спасибо, что воспользовались услугами Зооконсьержа! 🐾 Для вашего удобства у нас есть бот для записи:"
+      - link "@zooconcierge_bot" [ref=e77] [cursor=pointer]:
+        - /url: https://t.me/zooconcierge_bot
+      - paragraph [ref=e78]: Оставляйте заявки через него — так мы быстрее их увидим и возьмём в работу.
+    - generic [ref=e80]:
+      - heading "Частые вопросы" [level=2] [ref=e81]
+      - generic [ref=e82]:
+        - group [ref=e83]:
+          - generic "Как заказать услугу? +" [ref=e84] [cursor=pointer]
+        - group [ref=e85]:
+          - generic "Сколько стоят услуги? +" [ref=e86] [cursor=pointer]
+        - group [ref=e87]:
+          - generic "Как вы подбираете специалистов? +" [ref=e88] [cursor=pointer]
+        - group [ref=e89]:
+          - generic "Можно ли отменить заказ? +" [ref=e90] [cursor=pointer]
+    - generic [ref=e93]:
+      - heading "Свяжитесь с нами" [level=2] [ref=e94]
+      - paragraph [ref=e95]: Расскажите, какая именно помощь требуется вашему любимцу и на какие даты? Мы оперативно подберём для вас лучшие варианты!
+      - generic [ref=e96]:
+        - link "Написать в бот" [ref=e97] [cursor=pointer]:
+          - /url: https://t.me/zooconcierge_bot
+        - link "Написать на почту" [ref=e98] [cursor=pointer]:
+          - /url: mailto:info@zooconcierge.ru
+      - paragraph [ref=e99]: С уважением,команда зооконсьерж-сервиса 🐾
+  - contentinfo [ref=e100]:
+    - generic [ref=e101]:
+      - generic [ref=e102]:
+        - generic [ref=e103]:
+          - link "ЗОО КОНСЬЕРЖ" [ref=e104] [cursor=pointer]:
+            - /url: /
+            - generic [ref=e105]: ЗОО
+            - text: КОНСЬЕРЖ
+          - paragraph [ref=e106]: Сервис заботы о питомцах. Подберём проверенных специалистов для вашего любимца.
+        - generic [ref=e107]:
+          - heading "Услуги" [level=4] [ref=e108]
+          - list [ref=e109]:
+            - listitem [ref=e110]:
+              - link "Выгул собак" [ref=e111] [cursor=pointer]:
+                - /url: /walk
+            - listitem [ref=e112]:
+              - link "Зооняня" [ref=e113] [cursor=pointer]:
+                - /url: /nanny
+            - listitem [ref=e114]:
+              - link "Передержка" [ref=e115] [cursor=pointer]:
+                - /url: /boarding
+            - listitem [ref=e116]:
+              - link "Зоотакси" [ref=e117] [cursor=pointer]:
+                - /url: /taxi
+        - generic [ref=e118]:
+          - heading "Контакты" [level=4] [ref=e119]
+          - list [ref=e120]:
+            - listitem [ref=e121]:
+              - text: 🤖
+              - link "@zooconcierge_bot" [ref=e122] [cursor=pointer]:
+                - /url: https://t.me/zooconcierge_bot
+            - listitem [ref=e123]:
+              - text: 📧
+              - link "info@zooconcierge.ru" [ref=e124] [cursor=pointer]:
+                - /url: mailto:info@zooconcierge.ru
+            - listitem [ref=e125]: "🕐 Ежедневно: 8:00 — 22:00"
+      - paragraph [ref=e127]: © 2024 Зооконсьерж. Все права защищены.
+```
