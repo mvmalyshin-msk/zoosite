@@ -1,0 +1,9 @@
+.faq-section {
+  padding: 40px 0;
+  background: var(--white);
+}
+
+.faq-list {
+  max-width: 680px;
+  margin: 0 auto;
+}

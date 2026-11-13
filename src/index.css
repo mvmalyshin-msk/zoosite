@@ -1,0 +1,387 @@
+:root {
+  /* ZooConcierge palette */
+  --coral: #FC6751;
+  --coral-dark: #E55A45;
+  --cream: #FDF6EC;
+  --peach: #F9D9C0;
+  --ink: #2B2B2B;
+  --muted: #6F675E;
+  --line: #EADFCE;
+  --white: #FFFFFF;
+
+  /* Service colors */
+  --walk: #FF6C58;
+  --walk-bg: #FFE4DE;
+  --nanny: #2EB2A5;
+  --nanny-bg: #D8F2EF;
+  --boarding: #3970D7;
+  --boarding-bg: #DDE7FB;
+  --taxi: #E6B13D;
+  --taxi-bg: #FBF0D2;
+
+  /* Ribbon colors */
+  --client: #1D6FD6;
+  --admin: #D62B2B;
+
+  /* Error */
+  --err: #C62F1D;
+
+  /* Layout */
+  --max-width: 960px;
+  --radius-card: 18px;
+  --radius-service: 22px;
+  --radius-pill: 999px;
+  --radius-input: 14px;
+  --radius-faq: 16px;
+
+  /* Shadow */
+  --shadow-card: 0 1px 2px rgba(80, 50, 20, 0.08);
+  --shadow-coral: 0 6px 16px rgba(252, 103, 81, 0.32);
+  --shadow-map: 0 8px 24px rgba(0, 0, 0, 0.18);
+
+  /* Font */
+  --font: "PT Sans", -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+}
+
+@font-face {
+  font-family: "PT Sans";
+  font-style: normal;
+  font-weight: 400;
+  src: url("/fonts/ptsans-regular.woff2") format("woff2");
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "PT Sans";
+  font-style: normal;
+  font-weight: 700;
+  src: url("/fonts/ptsans-bold.woff2") format("woff2");
+  font-display: swap;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 17px;
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font);
+  color: var(--ink);
+  background: var(--cream);
+  line-height: 1.4;
+  -webkit-font-smoothing: antialiased;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  background: none;
+  font-family: var(--font);
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+.container {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 18px;
+}
+
+.app {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+main {
+  flex: 1;
+}
+
+/* ===== Brand Logo ===== */
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  font-size: 1.2rem;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+}
+
+.brand .zoo {
+  background: var(--coral);
+  color: var(--white);
+  padding: 2px 10px;
+  border-radius: var(--radius-pill);
+}
+
+/* ===== Buttons ===== */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 28px;
+  border-radius: var(--radius-pill);
+  font-size: 1rem;
+  font-weight: 700;
+  transition: opacity 0.2s, transform 0.2s;
+}
+
+.btn:hover {
+  opacity: 0.85;
+  transform: translateY(-1px);
+}
+
+.btn:active {
+  opacity: 0.75;
+}
+
+.btn-coral {
+  background: var(--coral);
+  color: var(--white);
+  box-shadow: var(--shadow-coral);
+}
+
+.btn-ghost {
+  background: var(--peach);
+  color: var(--ink);
+}
+
+.btn-outline {
+  background: var(--white);
+  color: var(--coral);
+  border: 2px solid var(--coral);
+}
+
+.btn-full {
+  width: 100%;
+}
+
+/* ===== Cards ===== */
+.card {
+  background: var(--white);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-card);
+  padding: 24px;
+}
+
+/* ===== Section ===== */
+.section-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 24px;
+  color: var(--ink);
+}
+
+/* ===== Chip ===== */
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 16px;
+  border-radius: var(--radius-pill);
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+/* ===== Input ===== */
+.input {
+  width: 100%;
+  padding: 12px 16px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-input);
+  font-family: var(--font);
+  font-size: 1rem;
+  outline: none;
+  transition: border-color 0.2s;
+  background: var(--white);
+  color: var(--ink);
+}
+
+.input:focus {
+  border-color: var(--coral);
+}
+
+.input::placeholder {
+  color: var(--muted);
+  opacity: 0.7;
+}
+
+textarea.input {
+  resize: vertical;
+  min-height: 100px;
+}
+
+select.input {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%236F675E' stroke-width='2' fill='none'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 16px center;
+  padding-right: 40px;
+}
+
+/* ===== Steps ===== */
+.steps {
+  list-style: none;
+  counter-reset: step;
+}
+
+.steps li {
+  counter-increment: step;
+  display: flex;
+  gap: 16px;
+  margin-bottom: 20px;
+  align-items: flex-start;
+}
+
+.steps li::before {
+  content: counter(step);
+  flex-shrink: 0;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--coral);
+  color: var(--white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 1rem;
+}
+
+.steps-text strong {
+  display: block;
+  font-size: 1rem;
+  margin-bottom: 2px;
+}
+
+.steps-text span {
+  font-size: 0.9rem;
+  color: var(--muted);
+}
+
+/* ===== FAQ ===== */
+.faq-item {
+  background: var(--white);
+  border-radius: var(--radius-faq);
+  box-shadow: var(--shadow-card);
+  margin-bottom: 12px;
+  overflow: hidden;
+}
+
+.faq-item summary {
+  padding: 18px 22px;
+  font-weight: 700;
+  font-size: 1rem;
+  cursor: pointer;
+  list-style: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.faq-item summary::-webkit-details-marker {
+  display: none;
+}
+
+.faq-item summary::after {
+  content: "+";
+  font-size: 1.4rem;
+  font-weight: 400;
+  color: var(--coral);
+  flex-shrink: 0;
+  transition: transform 0.2s;
+}
+
+.faq-item[open] summary::after {
+  content: "−";
+}
+
+.faq-item .faq-answer {
+  padding: 0 22px 18px;
+  font-size: 0.92rem;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+/* ===== Service color chips ===== */
+.chip-walk { background: var(--walk-bg); color: var(--walk); }
+.chip-nanny { background: var(--nanny-bg); color: var(--nanny); }
+.chip-boarding { background: var(--boarding-bg); color: var(--boarding); }
+.chip-taxi { background: var(--taxi-bg); color: var(--taxi); }
+
+/* ===== Back button ===== */
+.back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 18px;
+  border-radius: var(--radius-pill);
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--muted);
+  background: var(--white);
+  box-shadow: var(--shadow-card);
+  transition: color 0.2s, background 0.2s;
+  margin-bottom: 20px;
+}
+
+.back-btn:hover {
+  color: var(--coral);
+  background: var(--cream);
+}
+
+/* ===== Ribbon ===== */
+.ribbon {
+  background: var(--client);
+  color: var(--white);
+  text-align: center;
+  padding: 6px 0;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+}
+
+.ribbon-admin {
+  background: var(--admin);
+}
+
+/* ===== Page header ===== */
+.page-header {
+  padding: 20px 0;
+}
+
+.page-title {
+  font-size: clamp(1.6rem, 6vw, 2.2rem);
+  font-weight: 700;
+  letter-spacing: -0.015em;
+  margin-bottom: 8px;
+}
+
+.page-desc {
+  font-size: 1rem;
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 600px) {
+  html {
+    font-size: 16px;
+  }
+}

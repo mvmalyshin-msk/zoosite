@@ -1,0 +1,38 @@
+.products-section {
+  padding: 60px 0;
+}
+
+.product-filters {
+  display: flex;
+  gap: 10px;
+  margin: 24px 0 32px;
+  flex-wrap: wrap;
+}
+
+.filter-btn {
+  padding: 10px 20px;
+  border-radius: 50px;
+  font-size: 14px;
+  font-weight: 600;
+  background: var(--bg-light);
+  color: var(--text);
+  transition: var(--transition);
+  border: 2px solid transparent;
+}
+
+.filter-btn:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+.filter-active {
+  background: var(--primary);
+  color: white;
+  border-color: var(--primary);
+}
+
+.products-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 24px;
+}

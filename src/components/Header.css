@@ -1,0 +1,148 @@
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(253, 246, 236, 0.95);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--line);
+  padding: 12px 0;
+}
+
+.header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.brand {
+  font-size: 1.2rem;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  flex-shrink: 0;
+}
+
+.brand .zoo {
+  background: var(--coral);
+  color: var(--white);
+  padding: 2px 10px;
+  border-radius: var(--radius-pill);
+}
+
+.nav {
+  display: flex;
+  gap: 4px;
+}
+
+.nav-link {
+  padding: 8px 14px;
+  border-radius: var(--radius-pill);
+  font-size: 0.9rem;
+  font-weight: 700;
+  transition: background 0.2s, color 0.2s;
+  color: var(--ink);
+  white-space: nowrap;
+}
+
+.nav-link:hover {
+  background: var(--peach);
+}
+
+.nav-link-active {
+  background: var(--coral);
+  color: var(--white);
+}
+
+.nav-link-active:hover {
+  background: var(--coral-dark);
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.header-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  background: var(--white);
+  box-shadow: var(--shadow-card);
+  transition: transform 0.2s;
+}
+
+.header-btn:hover {
+  transform: scale(1.05);
+}
+
+.mobile-menu-btn {
+  display: none;
+  width: 40px;
+  height: 40px;
+  align-items: center;
+  justify-content: center;
+}
+
+.hamburger {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  width: 22px;
+}
+
+.hamburger span {
+  display: block;
+  height: 2px;
+  background: var(--ink);
+  border-radius: 2px;
+  transition: 0.3s;
+}
+
+.hamburger-active span:nth-child(1) {
+  transform: rotate(45deg) translate(5px, 5px);
+}
+
+.hamburger-active span:nth-child(2) {
+  opacity: 0;
+}
+
+.hamburger-active span:nth-child(3) {
+  transform: rotate(-45deg) translate(5px, -5px);
+}
+
+@media (max-width: 768px) {
+  .mobile-menu-btn {
+    display: flex;
+  }
+
+  .nav {
+    position: fixed;
+    top: 65px;
+    left: 0;
+    right: 0;
+    background: var(--cream);
+    flex-direction: column;
+    padding: 16px;
+    gap: 4px;
+    border-bottom: 1px solid var(--line);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+    transform: translateY(-120%);
+    transition: transform 0.3s ease;
+    z-index: 99;
+  }
+
+  .nav-open {
+    transform: translateY(0);
+  }
+
+  .nav-link {
+    padding: 12px 16px;
+    font-size: 1rem;
+  }
+}
