@@ -1,0 +1,77 @@
+.chat-card {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.chat-title {
+  font-size: clamp(1.8rem, 5vw, 2.4rem);
+  font-weight: 700;
+  margin-bottom: 16px;
+  color: var(--ink);
+  text-align: center;
+}
+
+.chat-desc {
+  font-size: 1.1rem;
+  color: var(--muted);
+  line-height: 1.6;
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+.chat-bot-card {
+  background: var(--white);
+  border-radius: var(--radius-card);
+  padding: 40px 32px;
+  box-shadow: var(--shadow-card);
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+.chat-bot-avatar {
+  font-size: 4rem;
+  margin-bottom: 16px;
+}
+
+.chat-bot-card h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 12px;
+  color: var(--ink);
+}
+
+.chat-bot-hint {
+  font-size: 0.95rem;
+  color: var(--muted);
+  margin-bottom: 24px;
+}
+
+.chat-template {
+  background: var(--white);
+  border-radius: var(--radius-card);
+  padding: 24px;
+  box-shadow: var(--shadow-card);
+}
+
+.chat-template h3 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin-bottom: 12px;
+  color: var(--ink);
+}
+
+.chat-template blockquote {
+  border-left: 3px solid var(--coral);
+  padding: 12px 16px;
+  margin: 0 0 12px;
+  background: var(--cream);
+  border-radius: 0 8px 8px 0;
+  font-size: 0.95rem;
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+.chat-template-hint {
+  font-size: 0.88rem;
+  color: var(--muted);
+}
