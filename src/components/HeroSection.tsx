@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import '../components/HeroSection.css';
 
 function HeroSection() {
@@ -12,7 +13,13 @@ function HeroSection() {
             Мы профессионально находим проверенных специалистов и решаем любые вопросы, связанные с вашим питомцем. Берём на себя всю рутину по поиску и проверке, чтобы вы были спокойны.
           </p>
           <div className="hero-actions">
-            <a href="#services" className="btn btn-coral">Наши услуги</a>
+            <Link
+              to="/"
+              onClick={() => document.getElementById('services')?.scrollIntoView({ behavior: 'smooth' })}
+              className="btn btn-coral"
+            >
+              Наши услуги
+            </Link>
             <a href="https://t.me/zooconcierge_bot" target="_blank" rel="noopener noreferrer" className="btn btn-ghost">
               Написать в бот
             </a>

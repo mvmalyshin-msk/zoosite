@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test';
 
 test.describe('Зооконсьерж — основной тест', () => {
-  const BASE_URL = 'http://127.0.0.1:5174';
+  const BASE_URL = 'http://127.0.0.1:4174';
 
   test('Главная страница загружается', async ({ page }) => {
     await page.goto(BASE_URL);
@@ -23,43 +23,43 @@ test.describe('Зооконсьерж — основной тест', () => {
   });
 
   test('Страница Выгул загружается', async ({ page }) => {
-    await page.goto(`${BASE_URL}/walk`);
+    await page.goto(`${BASE_URL}/#/walk`);
     await expect(page.locator('h1')).toContainText('Выгул');
     await expect(page.locator('.back-btn')).toBeVisible();
   });
 
   test('Страница Зооняня загружается', async ({ page }) => {
-    await page.goto(`${BASE_URL}/nanny`);
+    await page.goto(`${BASE_URL}/#/nanny`);
     await expect(page.locator('h1')).toContainText('Зооняня');
   });
 
   test('Страница Передержка загружается', async ({ page }) => {
-    await page.goto(`${BASE_URL}/boarding`);
+    await page.goto(`${BASE_URL}/#/boarding`);
     await expect(page.locator('h1')).toContainText('Передержка');
   });
 
   test('Страница Зоотакси загружается', async ({ page }) => {
-    await page.goto(`${BASE_URL}/taxi`);
+    await page.goto(`${BASE_URL}/#/taxi`);
     await expect(page.locator('h1')).toContainText('Зоотакси');
   });
 
   test('Страница Чат загружается', async ({ page }) => {
-    await page.goto(`${BASE_URL}/chat`);
+    await page.goto(`${BASE_URL}/#/chat`);
     await expect(page.locator('h1')).toContainText('Чат');
   });
 
   test('Страница Кабинет загружается', async ({ page }) => {
-    await page.goto(`${BASE_URL}/cabinet`);
+    await page.goto(`${BASE_URL}/#/cabinet`);
     await expect(page.locator('h1')).toContainText('Личный кабинет');
   });
 
   test('Страница О нас загружается', async ({ page }) => {
-    await page.goto(`${BASE_URL}/about`);
+    await page.goto(`${BASE_URL}/#/about`);
     await expect(page.locator('.page-title')).toBeVisible();
   });
 
   test('Страница Контакты загружается', async ({ page }) => {
-    await page.goto(`${BASE_URL}/contacts`);
+    await page.goto(`${BASE_URL}/#/contacts`);
     await expect(page.locator('h1')).toContainText('Контакты');
   });
 
@@ -76,14 +76,54 @@ test.describe('Зооконсьерж — основной тест', () => {
   test('Мобильное меню открывается', async ({ page }) => {
     await page.setViewportSize({ width: 375, height: 667 });
     await page.goto(BASE_URL);
-    await page.locator('.mobile-menu-btn').click();
-    await expect(page.locator('.nav')).toHaveClass(/nav-open/);
+    const menuButton = page.locator('.mobile-menu-btn');
+    const navigation = page.locator('.nav');
+    await menuButton.click();
+    await expect(navigation).toHaveClass(/nav-open/);
+    await navigation.getByRole('link', { name: 'Выгул' }).click();
+    await expect(page).toHaveURL(/#\/walk$/);
+    await expect(page.locator('h1')).toContainText('Выгул');
+    await expect(navigation).not.toHaveClass(/nav-open/);
+
+    await menuButton.click();
+    await expect(navigation).toHaveClass(/nav-open/);
+    await menuButton.click();
+    await expect(navigation).not.toHaveClass(/nav-open/);
+    await expect(menuButton).toHaveAttribute('aria-expanded', 'false');
+  });
+
+  test('Хедер не переполняет экран шириной 320px', async ({ page }) => {
+    await page.setViewportSize({ width: 320, height: 667 });
+    await page.goto(BASE_URL);
+    await expect.poll(() =>
+      page.evaluate(() => document.documentElement.scrollWidth)
+    ).toBeLessThanOrEqual(320);
+  });
+
+  test('CTA и карточки услуг ведут на корректные HashRouter-маршруты', async ({ page }) => {
+    await page.goto(BASE_URL);
+    await page.getByRole('link', { name: 'Наши услуги' }).click();
+    await expect(page).toHaveURL(/#\/$/);
+    await expect(page.locator('#services')).toBeInViewport();
+
+    const serviceRoutes = [
+      ['Зооняня', '/nanny'],
+      ['Выгул', '/walk'],
+      ['Зоотакси', '/taxi'],
+      ['Передержка', '/boarding'],
+    ];
+
+    for (const [service, route] of serviceRoutes) {
+      await page.goto(BASE_URL);
+      await page.locator('.service-card').filter({ has: page.locator('.service-title', { hasText: service }) }).click();
+      await expect(page).toHaveURL(new RegExp(`#${route}$`));
+    }
   });
 
   test('Все страницы имеют Header и Footer', async ({ page }) => {
     const pages = ['/', '/walk', '/nanny', '/boarding', '/taxi', '/chat', '/cabinet', '/about', '/contacts'];
     for (const path of pages) {
-      await page.goto(BASE_URL + path);
+      await page.goto(`${BASE_URL}/#${path}`);
       await expect(page.locator('.header')).toBeVisible();
       await expect(page.locator('.footer')).toBeVisible();
     }

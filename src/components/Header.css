@@ -122,9 +122,10 @@
     opacity: 0;
     transition: transform 0.3s, opacity 0.3s;
     z-index: 99;
+    pointer-events: none;
   }
 
-  .nav-open {
+  .nav.nav-open {
     transform: translateY(0);
     opacity: 1;
     pointer-events: auto;
@@ -132,5 +133,21 @@
 
   .mobile-menu-btn {
     display: flex;
+    position: relative;
+    z-index: 100;
+  }
+}
+
+@media (max-width: 360px) {
+  .header-inner {
+    gap: 8px;
+  }
+
+  .brand {
+    font-size: 1rem;
+  }
+
+  .header-actions {
+    gap: 6px;
   }
 }

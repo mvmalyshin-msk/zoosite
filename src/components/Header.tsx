@@ -23,7 +23,7 @@ function Header() {
           <span className="zoo">ЗОО</span>КОНСЬЕРЖ
         </Link>
 
-        <nav className={`nav ${mobileMenuOpen ? 'nav-open' : ''}`}>
+        <nav id="primary-navigation" className={`nav ${mobileMenuOpen ? 'nav-open' : ''}`}>
           {navItems.map(item => (
             <Link
               key={item.to}
@@ -47,6 +47,8 @@ function Header() {
             className="mobile-menu-btn"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             aria-label="Меню"
+            aria-expanded={mobileMenuOpen}
+            aria-controls="primary-navigation"
           >
             <span className={`hamburger ${mobileMenuOpen ? 'hamburger-active' : ''}`}>
               <span></span>
