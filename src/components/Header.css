@@ -125,7 +125,7 @@
     pointer-events: none;
   }
 
-  .nav-open {
+  .nav.nav-open {
     transform: translateY(0);
     opacity: 1;
     pointer-events: auto;

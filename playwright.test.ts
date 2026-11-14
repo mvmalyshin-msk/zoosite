@@ -80,6 +80,13 @@ test.describe('Зооконсьерж — основной тест', () => {
     const navigation = page.locator('.nav');
     await menuButton.click();
     await expect(navigation).toHaveClass(/nav-open/);
+    await navigation.getByRole('link', { name: 'Выгул' }).click();
+    await expect(page).toHaveURL(/#\/walk$/);
+    await expect(page.locator('h1')).toContainText('Выгул');
+    await expect(navigation).not.toHaveClass(/nav-open/);
+
+    await menuButton.click();
+    await expect(navigation).toHaveClass(/nav-open/);
     await menuButton.click();
     await expect(navigation).not.toHaveClass(/nav-open/);
     await expect(menuButton).toHaveAttribute('aria-expanded', 'false');
